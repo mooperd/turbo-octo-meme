@@ -1,0 +1,61 @@
+{
+  "variables": {
+      "template_name":       "{{env `UBUNTU_IMAGE_NAME`}}",
+      "vcenter_server":      "{{env `GOVC_HOSTNAME`}}",
+      "username":            "{{env `GOVC_USERNAME`}}",
+      "password":            "{{env `GOVC_PASSWORD`}}", 
+      "cluster":             "{{env `GOVC_CLUSTER`}}",
+      "datastore":           "{{env `GOVC_DATASTORE`}}"
+  },
+
+  "builders": [
+    {
+      "type":                "vsphere-clone",
+      "template":            "{{user `template_name`}}",
+      "vcenter_server":      "{{user `vcenter_server`}}",
+      "username":            "{{user `username`}}",
+      "password":            "{{user `password`}}",
+      "cluster":             "{{user `cluster`}}",
+      "datastore":           "{{user `datastore`}}",
+      "insecure_connection": "true",
+
+      "vm_name":             "mongo-ubuntu-image",
+      "ssh_username":        "ubuntu",
+      "CPUs":                1,
+      "RAM":                 1024,
+      "RAM_reserve_all":     true,
+      "convert_to_template": true
+    }
+  ],
+
+  "provisioners": [
+    {
+    "type": "file",
+    "source": "automation-agent.config",
+    "destination": "~/automation-agent.config"
+    },{
+    "type": "file",
+    "source": "sysctl.conf",
+    "destination": "~/sysctl.conf"
+    },
+    {
+      "type":                "shell",
+      "inline":              [
+     "sudo apt-get -y install libcurl4 libgssapi-krb5-2 libkrb5-dbg libldap-2.4-2 libpci3 libsasl2-2 snmp liblzma5 openssl",
+     "curl -OL http://blah.devops-wizard.com:8080/download/agent/automation/mongodb-mms-automation-agent-manager_10.14.18.6453-1_amd64.ubuntu1604.deb",
+     "sudo dpkg -i mongodb-mms-automation-agent-manager_10.14.18.6453-1_amd64.ubuntu1604.deb",
+     "sudo mkdir -p /data",
+     "sudo chown mongodb:mongodb /data",
+     "sudo cloud-init clean",
+     "sudo truncate -s0 /etc/machine-id", 
+     "sudo mv ~/automation-agent.config /etc/mongodb-mms/automation-agent.config",
+     "sudo mv ~/sysctl.conf /etc/sysctl.conf"
+      ]
+    },
+    {
+    "type": "file",
+    "source": "automation-agent.config",
+    "destination": "/etc/mongodb-mms/automation-agent.config"
+    }
+  ]
+}
