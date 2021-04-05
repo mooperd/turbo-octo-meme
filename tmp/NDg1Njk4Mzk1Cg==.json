@@ -1,0 +1,42 @@
+{
+  "DiskProvisioning": "flat",
+  "IPAllocationPolicy": "dhcpPolicy",
+  "IPProtocol": "IPv4",
+  "PropertyMapping": [
+    {
+      "Key": "instance-id",
+      "Value": ""
+    },
+    {
+      "Key": "hostname",
+      "Value": ""
+    },
+    {
+      "Key": "seedfrom",
+      "Value": ""
+    },
+    {
+      "Key": "public-keys",
+      "Value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDWZC71jXNkeYisdKlJc7jLt8fNvgIdsqnPKE48KAtxc3Y7edMR31FWdv73MHZ68tNaHDT4Fo+2QIfYCjGdRone9gyIK0Fs2sHGB8w4ijyMqq4yogl5w13SsH8pP6LIPf5mSE9AdBgM18OAY93ur43gFKN5PK1L9bbQsPM5YDIz5anA9YlvQ/XnCeURScwUYFLmGUsh0QF1U5bUjoLTfWUrCDIFKca0x7aMEsnAzi67AGdi6NfyS8KufOvWYIEMiEgz1vKhrlDMANq3yEFGyfjej36FooO66YW5prj16SkUQe/LhrjnjullGxjEnUsMe8Zb1Vw1Ti1XqG9SrdoadJNN ubuntu@ClusterControl"
+    },
+    {
+      "Key": "user-data",
+      "Value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDWZC71jXNkeYisdKlJc7jLt8fNvgIdsqnPKE48KAtxc3Y7edMR31FWdv73MHZ68tNaHDT4Fo+2QIfYCjGdRone9gyIK0Fs2sHGB8w4ijyMqq4yogl5w13SsH8pP6LIPf5mSE9AdBgM18OAY93ur43gFKN5PK1L9bbQsPM5YDIz5anA9YlvQ/XnCeURScwUYFLmGUsh0QF1U5bUjoLTfWUrCDIFKca0x7aMEsnAzi67AGdi6NfyS8KufOvWYIEMiEgz1vKhrlDMANq3yEFGyfjej36FooO66YW5prj16SkUQe/LhrjnjullGxjEnUsMe8Zb1Vw1Ti1XqG9SrdoadJNN ubuntu@ClusterControl"
+    },
+    {
+      "Key": "password",
+      "Value": ""
+    }
+  ],
+  "NetworkMapping": [
+    {
+      "Name": "VM Network",
+      "Network": "vmnet1"
+    }
+  ],
+  "MarkAsTemplate": false,
+  "PowerOn": true,
+  "InjectOvfEnv": false,
+  "WaitForIP": false,
+  "Name": null
+}

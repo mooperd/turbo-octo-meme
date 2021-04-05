@@ -1,0 +1,1 @@
+govc_env nsx-t-tf setup-base-ubuntu-image tmp

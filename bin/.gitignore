@@ -1,0 +1,1 @@
+bin govc_env lib nsx-t-tf set-up-images.sh setup-base-ubuntu-image tmp

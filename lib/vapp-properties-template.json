@@ -1,0 +1,42 @@
+{
+  "DiskProvisioning": "flat",
+  "IPAllocationPolicy": "dhcpPolicy",
+  "IPProtocol": "IPv4",
+  "PropertyMapping": [
+    {
+      "Key": "instance-id",
+      "Value": "$VAPP_INSTANCE_ID"
+    },
+    {
+      "Key": "hostname",
+      "Value": "$VAPP_HOSTNAME"
+    },
+    {
+      "Key": "seedfrom",
+      "Value": "$VAPP_SEEDFROM"
+    },
+    {
+      "Key": "public-keys",
+      "Value": "$VAPP_PUBLIC_KEYS"
+    },
+    {
+      "Key": "user-data",
+      "Value": "$VAPP_PUBLIC_KEYS"
+    },
+    {
+      "Key": "password",
+      "Value": "$VAPP_PASSWORD"
+    }
+  ],
+  "NetworkMapping": [
+    {
+      "Name": "VM Network",
+      "Network": "database-segment"
+    }
+  ],
+  "MarkAsTemplate": true,
+  "PowerOn": false,
+  "InjectOvfEnv": false,
+  "WaitForIP": false,
+  "Name": null
+}
