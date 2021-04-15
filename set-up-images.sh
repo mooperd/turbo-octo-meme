@@ -4,6 +4,9 @@ set -euo pipefail
 
 cd $(dirname "$0") && pwd
 
+#Clean up ssh host idents
+> /home/ubuntu/.ssh/known_hosts
+
 export B64_TIMESTAMP=$(date '+%N' | base64)
 export VAPP_PUBLIC_KEYS=$(cat ~/.ssh/id_rsa.pub)
 export SCRIPT_DIR=$(dirname "$0")
@@ -14,6 +17,7 @@ export GOVC_BINARY_URL="https://github.com/vmware/govmomi/releases/download/v0.2
 export GOVC_FILESYSTEM_LOCATION="bin/govc"
 export ENV_SOURCE_FILESYSTEM_LOCATION="govc_env"
 export UBUNTU_SOURCE_URL="https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.ova"
+export VAPP_PASSWORD=""
 # Get positional command line arguments
 export CLUSTER_NAME=$1
 export CLUSTER_SIZE=$2
@@ -37,7 +41,7 @@ else
     exit 1
 fi
 
-
+# Bit of a dirty hack
 # See if there is already an vm template available. If not, then upload it!
 if $(bin/govc find /*/vm | grep -w -q $IMAGE_NAME) 
     then
@@ -53,8 +57,11 @@ list_of_nodes=""
 for i in $(seq 1 $CLUSTER_SIZE)
     do
         nodename=$CLUSTER_NAME-$i
-	bin/govc vm.clone -vm $IMAGE_NAME -folder=databases -c=4 -m=8096 -on=false $nodename
-        bin/govc vm.disk.change -vm $nodename -size 10G
+	bin/govc vm.clone -vm $IMAGE_NAME -folder=databases -link=true -c=1 -m=1024 -on=false $nodename
+        # bin/govc vm.disk.change -vm $nodename -size 3G
+	# bin/govc tags.category.create -d "Cluster Name" cluster-name
+	# bin/govc tags.attach -c cluster-name $CLUSTER_NAME /$GOVC_DATACENTER/vm/databases/$nodename
+
         list_of_nodes="$list_of_nodes $nodename"
     done
 
@@ -68,6 +75,9 @@ for i in $(seq 1 $CLUSTER_SIZE)
         nodename=$CLUSTER_NAME-$i
         echo "getting IP address for node \"$nodename\". This might take a while."
 	ip=$(bin/govc vm.ip -v4 -wait 5m $nodename)
+	ssh $ip "sudo -S sysctl -w net.ipv6.conf.all.disable_ipv6=1; sudo -S sysctl -w net.ipv6.conf.default.disable_ipv6=1; sudo -S sysctl -w net.ipv6.conf.lo.disable_ipv6=1" 
+	ssh $ip "sudo -S apt-get update; sudo -S apt-get upgrade -y"
+        ssh $ip "echo 'Acquire::http::Proxy \"http://10.141.0.50:3142\";' | sudo tee -a /etc/apt/apt.conf.d/00aptproxy"
 	list_of_ips="$list_of_ips,$ip"
     done
 
